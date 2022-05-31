@@ -113,7 +113,7 @@ async function getCaptcha() {
 async function captchaLogin() {
   if (captchaParam.phone === "") return message.error("请输入手机号");
   if (captchaParam.captcha === "") return message.error("请输入验证码");
-  const res = verifyCaptcha(captchaParam);
+  const res = await verifyCaptcha(captchaParam);
   if (res.data) {
     message.success("登录成功");
   } else {
