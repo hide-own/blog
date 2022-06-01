@@ -27,7 +27,7 @@ jobs:
           FTP_SERVER: ${{ secrets.SERVER_IP }}
           FTP_USERNAME: blog   #用户名
           FTP_PASSWORD: ${{ secrets.SSH_PRIVATE_KEY }} #密码
-          LOCAL_DIR: docs/.vuepress/dist
+          LOCAL_DIR: ./dist
           REMOTE_DIR: /public
           ARGS: --delete --transfer-all --exclude=logreport --verbose
 
