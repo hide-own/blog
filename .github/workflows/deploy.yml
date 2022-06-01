@@ -28,7 +28,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }} #服务器ip
           password: ${{ secrets.SSH_PRIVATE_KEY }} #密码
           remoteDir: /public
-          publishDir: ./dist # 部署打包后的 dist 目录
+          localDir: ./dist # 部署打包后的 dist 目录
           forceSsl: true
 
       - name: Deploy
