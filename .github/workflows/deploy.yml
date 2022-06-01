@@ -22,7 +22,7 @@ jobs:
         run: npm run build # 打包
 
       - name: deploy file to server
-        uses: wlixcc/FTP-Deploy-Action@v1.0
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
           username: blog   #用户名
           server: ${{ secrets.SERVER_IP }} #服务器ip
