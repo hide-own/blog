@@ -25,11 +25,13 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@2.0.0
         with:
           FTP_SERVER: ${{ secrets.SERVER_IP }}
-          FTP_USERNAME: blog   #用户名
+          port: 21
+          FTP_USERNAME: 'blog'   #用户名
           FTP_PASSWORD: ${{ secrets.SSH_PRIVATE_KEY }} #密码
-          LOCAL_DIR: ./dist
-          REMOTE_DIR: /public
-          ARGS: --delete --transfer-all --exclude=logreport --verbose
+          LOCAL_DIR: './dist'
+          REMOTE_DIR: '/public'
+          deleteRemote: true
+          FORCE_PASV: true
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3 # 使用部署到 GitHub pages 的 action
