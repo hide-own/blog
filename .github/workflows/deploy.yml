@@ -22,14 +22,14 @@ jobs:
         run: npm run build # 打包
 
       - name: FTP-Deploy-Action
-        uses: sebastianpopp/ftp-action@releases/v2
+        uses: SamKirkland/FTP-Deploy-Action@2.0.0
         with:
-          user: blog   #用户名
-          host: ${{ secrets.SERVER_IP }} #服务器ip
-          password: ${{ secrets.SSH_PRIVATE_KEY }} #密码
-          remoteDir: /public
-          localDir: ./dist # 部署打包后的 dist 目录
-          forceSsl: true
+          FTP_SERVER: ${{ secrets.SERVER_IP }}
+          FTP_USERNAME: blog   #用户名
+          FTP_PASSWORD: ${{ secrets.SSH_PRIVATE_KEY }} #密码
+          LOCAL_DIR: docs/.vuepress/dist
+          REMOTE_DIR: /public
+          ARGS: --delete --transfer-all --exclude=logreport --verbose
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3 # 使用部署到 GitHub pages 的 action
