@@ -30,7 +30,6 @@ jobs:
           FTP_PASSWORD: ${{ secrets.SSH_PRIVATE_KEY }} #密码
           LOCAL_DIR: './dist'
           REMOTE_DIR: '/public'
-          deleteRemote: true
           FORCE_PASV: true
 
       - name: Deploy
