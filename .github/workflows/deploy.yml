@@ -21,21 +21,20 @@ jobs:
       - name: Build
         run: npm run build # 打包
 
-      # 利用action把build好的文件上传到服务器/var/www/react-app路径下,需要确认此目录已在服务端创建
       - name: deploy file to server
-      uses: wlixcc/FTP-Deploy-Action@v1.0
-      with:
-        username: blog   #用户名
-        server: ${{ secrets.SERVER_IP }} #服务器ip
-        ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} #密码
-        local_path: ./dist  # 对应我们项目build的文件夹路径
-        remote_path: ./public  # 部署目录
+        uses: wlixcc/FTP-Deploy-Action@v1.0
+        with:
+          username: blog   #用户名
+          server: ${{ secrets.SERVER_IP }} #服务器ip
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} #密码
+          local_path: ./dist  # 对应我们项目build的文件夹路径
+          remote_path: /public  # 部署目录
 
-        - name: Deploy
-          uses: peaceiris/actions-gh-pages@v3 # 使用部署到 GitHub pages 的 action
-          with:
-            publish_dir: ./dist # 部署打包后的 dist 目录
-            github_token: ${{ secrets.BLOG }} # secret 名
-            user_name: ${{ secrets.MY_USER_NAME }}
-            user_email: ${{ secrets.MY_USER_EMAIL }}
-            commit_message: "博客社区" # 部署时的 git 提交信息，自由填写
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3 # 使用部署到 GitHub pages 的 action
+        with:
+          publish_dir: ./dist # 部署打包后的 dist 目录
+          github_token: ${{ secrets.BLOG }} # secret 名
+          user_name: ${{ secrets.MY_USER_NAME }}
+          user_email: ${{ secrets.MY_USER_EMAIL }}
+          commit_message: "博客社区" # 部署时的 git 提交信息，自由填写
