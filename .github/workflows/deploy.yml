@@ -26,11 +26,11 @@ jobs:
         with:
           FTP_SERVER: ${{ secrets.SERVER_IP }}
           port: 21
-          FTP_USERNAME: 'blog'   #用户名
+          FTP_USERNAME: blog   #用户名
           FTP_PASSWORD: ${{ secrets.SSH_PRIVATE_KEY }} #密码
-          LOCAL_DIR: './dist'
-          REMOTE_DIR: '/public'
-          FORCE_PASV: true
+          LOCAL_DIR: /dist
+          REMOTE_DIR: /public/add
+          ARGS: --delete --transfer-all --exclude=logreport --verbose --FORCE_PASV
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3 # 使用部署到 GitHub pages 的 action
