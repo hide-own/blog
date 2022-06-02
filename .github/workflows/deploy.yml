@@ -21,16 +21,6 @@ jobs:
       - name: Build
         run: npm run build # 打包
 
-      - name: FTP-Deploy-Action
-        uses: wlixcc/SFTP-Deploy-Action@v1.0
-        with:
-          username: 'blog'   #ssh user name
-          server: ${{ secrets.SERVER_IP }} #引用之前创建好的secret
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} #引用之前创建好的secret
-          local_path: './dist/*'  # 对应我们项目build的文件夹路径
-          remote_path: '/'
-          port: 21
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3 # 使用部署到 GitHub pages 的 action
         with:
