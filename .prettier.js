@@ -11,7 +11,7 @@ module.exports = {
   printWidth: 300, // 一行最多 300 字符
   tabWidth: 4, // 使用 4 个空格缩进
   semi: false, // 行尾需要有分号
-  singleQuote: true, // 使用单引号而不是双引号
+  singleQuote: false, // 使用单引号而不是双引号
   useTabs: true, // 用制表符而不是空格缩进行
   quoteProps: "as-needed", // 仅在需要时在对象属性两边添加引号
   jsxSingleQuote: false, // 在 JSX 中使用单引号而不是双引号

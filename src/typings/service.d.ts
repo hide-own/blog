@@ -17,6 +17,8 @@ interface ServiceRequestError {
   code: string | number;
   /** 错误信息 */
   msg: string;
+  /** 错误信息 */
+  message: string;
 }
 
 /** 请求结果 */
@@ -27,6 +29,8 @@ interface ServiceRequestResult<T = unknown> {
   headers?: Record<string, string>;
   /** 结果数据 */
   data: T | null;
+  /** 错误信息 */
+  message: string;
 }
 
 type AsyncServiceRequestResult<T = unknown> = Promise<ServiceRequestResult<T>>;

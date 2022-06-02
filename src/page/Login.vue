@@ -106,6 +106,8 @@ async function getCaptcha() {
   const res = await captcha({ phone: captchaParam.phone });
   if (res.data) {
     message.success("验证码已发送");
+  } else {
+    message.error(res.message);
   }
 }
 
@@ -117,7 +119,7 @@ async function captchaLogin() {
   if (res.data) {
     message.success("登录成功");
   } else {
-    message.error("请输入正确的验证码");
+    message.error(res.message);
   }
 }
 
