@@ -27,8 +27,9 @@ jobs:
           username: 'blog'   #ssh user name
           server: ${{ secrets.SERVER_IP }} #引用之前创建好的secret
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} #引用之前创建好的secret
-          local_path: './build/*'  # 对应我们项目build的文件夹路径
+          local_path: './dist/*'  # 对应我们项目build的文件夹路径
           remote_path: '/'
+          port: 21
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3 # 使用部署到 GitHub pages 的 action
