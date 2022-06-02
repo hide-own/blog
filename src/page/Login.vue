@@ -108,6 +108,7 @@ async function getCaptcha() {
     message.success("验证码已发送");
   } else {
     message.error(res.message);
+    console.log(res);
   }
 }
 
