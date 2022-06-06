@@ -6,7 +6,7 @@ export interface userState {
 export const user = defineStore("user", {
   state: (): userState => {
     return {
-      token: "",
+      token: null,
     };
   },
   getters: {},

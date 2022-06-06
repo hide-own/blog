@@ -5,7 +5,11 @@ type loginType = {
   phone: string;
   password: string;
 };
-export function login(data: loginType): AsyncServiceRequestResult<unknown> {
+
+export function login(data: loginType): AsyncServiceRequestResult<{
+  msg: string;
+  token: string;
+}> {
   return NetEase.get("/login/cellphone", { params: data });
 }
 
@@ -16,13 +20,16 @@ export function captcha(data: {
   return NetEase.get("/captcha/sent", { params: data });
 }
 
-//获取验证码
+//获取登录
 type verifyCaptchaType = {
   phone: string;
   captcha: string;
 };
+
 export function verifyCaptcha(
   data: verifyCaptchaType
-): AsyncServiceRequestResult<unknown> {
+): AsyncServiceRequestResult<{
+  msg: string;
+}> {
   return NetEase.get("/captcha/verify", { params: data });
 }

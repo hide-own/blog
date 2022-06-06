@@ -31,25 +31,29 @@
           />
         </form>
         <form class="sign-up-form">
-          <h2 class="title">注册</h2>
+          <h2 class="title">登录</h2>
           <div class="input-field">
             <i class="ht ht-yonghu"></i>
-            <input type="text" placeholder="用户名" />
+            <input
+              v-model="loginParam.phone"
+              type="text"
+              placeholder="用户名"
+            />
           </div>
           <div class="input-field">
             <i class="ht ht-suoding"></i>
-            <input type="password" placeholder="密码" />
+            <input
+              v-model="loginParam.password"
+              type="password"
+              placeholder="密码"
+            />
           </div>
-          <div class="input-field">
-            <i class="ht ht-suoding"></i>
-            <input type="password" placeholder="确定密码" />
-          </div>
-          <div class="input-field">
-            <i class="ht ht-anquanbaozhang"></i>
-            <input type="text" placeholder="验证码" />
-            <button type="button" class="btn captcha">验证码</button>
-          </div>
-          <input type="submit" class="btn" value="立即注册" />
+          <input
+            type="button"
+            class="btn"
+            value="立即登录"
+            @click="passwordToLogin"
+          />
         </form>
       </div>
     </div>
@@ -88,9 +92,16 @@
 </template>
 
 <script setup lang="ts">
-import { captcha, verifyCaptcha } from "@/common/apis/api";
+import { captcha, login, verifyCaptcha } from "@/common/apis/api";
 import { message } from "ant-design-vue";
 import { reactive, ref } from "vue";
+import { Md5 } from "ts-md5";
+import { user } from "@/store/user";
+
+const userStore = user();
+
+//false = 登录
+let register = ref<boolean>(false);
 
 //验证码登录参数
 let captchaParam = reactive<{
@@ -113,8 +124,6 @@ async function getCaptcha() {
 
 //验证码登录
 async function captchaLogin() {
-  if (captchaParam.phone === "") return message.error("请输入手机号");
-  if (captchaParam.captcha === "") return message.error("请输入验证码");
   const res = await verifyCaptcha(captchaParam);
   if (res.data) {
     message.success("登录成功");
@@ -123,12 +132,31 @@ async function captchaLogin() {
   }
 }
 
-let register = ref<boolean>(false);
+//密码登录参数
+let loginParam = reactive<{
+  phone: string;
+  password: string;
+}>({
+  phone: "",
+  password: "",
+});
 
-// async function logg() {
-//   let res = await login({ phone: "18708100736", password: "12346" });
-//   console.log(res);
-// }
+const md5 = new Md5();
+
+//密码登录
+async function passwordToLogin() {
+  let res = await login(loginParam);
+  console.log(res);
+  if (res.data) {
+    if (res.data.msg) {
+      message.error(res.data.msg);
+    } else {
+      userStore.modifyToken(res.data!.token);
+    }
+  } else {
+    message.error(res.error!.msg);
+  }
+}
 </script>
 
 <style scoped lang="less">
