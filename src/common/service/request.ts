@@ -5,8 +5,10 @@ import axios, {
   AxiosResponse,
 } from "axios";
 import { waitLoginComplete } from "./auth";
+
 //持久化
-import { getPersist, removePersist, setPersist } from "../shared";
+import { user } from "@/store/user";
+const userStore = user();
 
 type RequestMethod = "get" | "post" | "put" | "delete";
 
@@ -117,7 +119,7 @@ async function handleResponseError<T>(
     error.msg = NETWORK_ERROR_MSG;
   } else if (response.status === 401 || response.data.code === 401) {
     // 弹出登录框等待登录  vuex里面设置
-    removePersist("token");
+    userStore.modifyToken(null);
     return await waitLoginComplete(response.config, axios);
   } else {
     const errorCode: ErrorStatus = response.status as ErrorStatus;
@@ -150,7 +152,7 @@ export function createAxios(
   const instance = axios.create(axiosConfig);
   instance.interceptors.request.use(function (config: AxiosRequestConfig) {
     const handleConfig: AxiosRequestConfig = { ...config };
-    const token: string | null = getPersist("token");
+    const token: string | null = userStore.token;
     if (token != null) {
       // 如果token 存在则携带相关token访问
       handleConfig.headers ??= {};
@@ -178,7 +180,7 @@ export function createAxios(
           // 不是有效地刷新令牌。
           return handleRefreshTokenError();
         }
-        setPersist("token", token);
+        userStore.modifyToken(token);
       }
       const headers = { ...response.headers };
       const error: ServiceRequestError = {
@@ -198,7 +200,7 @@ export function createAxios(
         error.msg = RESPONSE_ERROR_MSG;
       } else if (response.data.code === 401) {
         // 弹出登录框等待登录
-        removePersist("token");
+        userStore.modifyToken(null);
         return waitLoginComplete(response.config, instance);
       } else if (response.data.code === 402) {
         // 接口无权限

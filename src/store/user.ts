@@ -1,16 +1,17 @@
 import { defineStore } from "pinia";
 
+export interface userState {
+  token: string | null;
+}
 export const user = defineStore("user", {
-  state: () => {
+  state: (): userState => {
     return {
       token: "",
-      menuKey: ["Size"],
-      aSmallScreen: false,
     };
   },
   getters: {},
   actions: {
-    modifyToken(data: string) {
+    modifyToken(data: string | null) {
       this.token = data;
     },
   },
@@ -19,7 +20,7 @@ export const user = defineStore("user", {
     strategies: [
       {
         key: "token",
-        storage: sessionStorage,
+        storage: localStorage,
         paths: ["token"],
       },
     ],
