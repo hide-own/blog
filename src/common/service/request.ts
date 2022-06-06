@@ -5,7 +5,7 @@ import axios, {
   AxiosResponse,
 } from "axios";
 import { waitLoginComplete } from "./auth";
-import { Ref } from "vue";
+//持久化
 import { getPersist, removePersist, setPersist } from "../shared";
 
 type RequestMethod = "get" | "post" | "put" | "delete";
@@ -17,7 +17,6 @@ interface ResponseData {
 }
 
 const REQUEST_TIMEOUT = 60 * 1000; // 请求超时时间
-// const ERROR_MSG_DURATION = 3 * 1000 // 错误信息的显示时间
 const DEFAULT_REQUEST_ERROR_CODE = "DEFAULT"; // 默认的请求错误code
 const DEFAULT_REQUEST_ERROR_MSG = "请求错误~"; // 默认的请求错误文本
 const REQUEST_TIMEOUT_CODE = "ECONNABORTED"; // 请求超时的错误code(为固定值：ECONNABORTED)
@@ -50,6 +49,7 @@ export const ERROR_STATUS = {
 
 export type ErrorStatus = keyof typeof ERROR_STATUS;
 
+/** 检车数据格式*/
 export function isResponseData(data: unknown): data is ResponseData {
   return data != null && typeof data === "object" && "code" in data;
 }
@@ -84,14 +84,13 @@ async function handleAxiosError<T>(
     // 超时错误
     error.code = REQUEST_TIMEOUT_CODE;
     error.msg = REQUEST_TIMEOUT_MSG;
-  } else if (!axiosError.response) {
-    // 请求不成功的错误
-    const errorCode: ErrorStatus =
-      ((axiosError.response as AxiosResponse | undefined)
-        ?.status as ErrorStatus) || "DEFAULT";
-    error.code = errorCode;
-    error.msg = ERROR_STATUS[errorCode];
   }
+  // 请求不成功的错误
+  const errorCode: ErrorStatus =
+    ((axiosError.response as AxiosResponse | undefined)
+      ?.status as ErrorStatus) || "DEFAULT";
+  error.code = errorCode;
+  error.msg = axiosError.response?.data.message || ERROR_STATUS[errorCode];
   showErrorMsg(error);
   return { error, data: null };
 }
@@ -131,14 +130,9 @@ async function handleResponseError<T>(
 
 /**
  * 处理返回的刷新令牌错误
- *
- * @param {AxiosResponse} response
  * @return {ServiceRequestResult}
  */
-async function handleRefreshTokenError<T>(
-  response: AxiosResponse
-): Promise<ServiceRequestResult<T>> {
-  response.headers; // TODO delete this line
+async function handleRefreshTokenError<T>(): Promise<ServiceRequestResult<T>> {
   return {
     error: {
       type: "backend",
@@ -154,16 +148,14 @@ export function createAxios(
   axiosConfig: AxiosRequestConfig = {}
 ): AxiosInstance {
   const instance = axios.create(axiosConfig);
-
   instance.interceptors.request.use(function (config: AxiosRequestConfig) {
     const handleConfig: AxiosRequestConfig = { ...config };
     const token: string | null = getPersist("token");
     if (token != null) {
       // 如果token 存在则携带相关token访问
       handleConfig.headers ??= {};
-      handleConfig.headers["Authorization"] = "Bearer " + token;
+      handleConfig.headers["Authorization"] = token;
     }
-
     if (!handleConfig.timeout) {
       handleConfig.timeout = REQUEST_TIMEOUT;
     }
@@ -181,12 +173,10 @@ export function createAxios(
       }
       // 刷新了授权令牌，则重新存放。
       if (response.headers.authorization) {
-        const tokenParts: string[] =
-          response.headers.authorization.split(/\s+/);
-        const token: string = tokenParts[1] ?? "";
-        if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
+        const token: string = response.headers.authorization ?? "";
+        if (token === "") {
           // 不是有效地刷新令牌。
-          return handleRefreshTokenError(response);
+          return handleRefreshTokenError();
         }
         setPersist("token", token);
       }
@@ -219,7 +209,7 @@ export function createAxios(
         error.code = REQUEST_JITTER_CODE;
         error.msg = REQUEST_JITTER_MSG;
       } else if (response.data.code === 500) {
-        // ???
+        // 服务器错误
         error.code = 500;
         error.msg = response.data.msg || ERROR_STATUS[500];
       } else {
@@ -284,53 +274,6 @@ export interface RequestUtils {
     url: string,
     config: AxiosRequestConfig
   ): Promise<ServiceRequestResult<T>>;
-}
-
-export interface UseRequest<T = unknown> {
-  data: Ref<T | null>;
-  error: Ref<ServiceRequestError | null>;
-  loading: Ref<boolean>;
-  network: Ref<boolean>;
-}
-
-export interface RequestHooks {
-  /**
-   * get请求
-   * @param url - 请求地址
-   * @param config - axios配置
-   */
-  get<T = unknown>(url: string, config?: AxiosRequestConfig): UseRequest<T>;
-
-  /**
-   * post请求
-   * @param url - 请求地址
-   * @param data - 请求的body的data
-   * @param config - axios配置
-   */
-  post<T = unknown>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig
-  ): UseRequest<T>;
-
-  /**
-   * put请求
-   * @param url - 请求地址
-   * @param data - 请求的body的data
-   * @param config - axios配置
-   */
-  put<T = unknown>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig
-  ): UseRequest<T>;
-
-  /**
-   * delete请求
-   * @param url - 请求地址
-   * @param config - axios配置
-   */
-  delete<T = unknown>(url: string, config: AxiosRequestConfig): UseRequest<T>;
 }
 
 /**

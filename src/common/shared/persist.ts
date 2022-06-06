@@ -73,10 +73,3 @@ export function clearPersist(token = false): void {
   }
   sys.clear();
 }
-
-export function isLogin(client: "merchant" | "platform" | "shop"): boolean {
-  if (isExpire("token_type")) return false;
-  if (client === "shop") return !isExpire("token");
-  if (client === "merchant") return !isExpire("factory_token");
-  return !isExpire("admin_token");
-}

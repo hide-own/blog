@@ -1,7 +1,3 @@
-export type StoreData<D extends Record<string, unknown>> = {
-  [P in keyof D]?: StoreItem<D[P]>;
-};
-
 interface StoreItem<T> {
   value: T;
   expire: number | null;

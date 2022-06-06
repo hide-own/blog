@@ -1,8 +1,3 @@
-/** 运行环境类型 */
-type ServiceRuntimeEnvironment =
-  | "test" // 测试环境
-  | "prod"; // 正式环境
-
 /** 请求的错误类型 */
 type ServiceRequestErrorType =
   | "axios" // axios 错误：网络错误, 请求超时, 默认的兜底错误

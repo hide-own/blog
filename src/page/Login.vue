@@ -107,8 +107,7 @@ async function getCaptcha() {
   if (res.data) {
     message.success("验证码已发送");
   } else {
-    message.error(res.message);
-    console.log(res);
+    message.error(res.error!.msg);
   }
 }
 
@@ -120,7 +119,7 @@ async function captchaLogin() {
   if (res.data) {
     message.success("登录成功");
   } else {
-    message.error(res.message);
+    message.error(res.error!.msg);
   }
 }
 
