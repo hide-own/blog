@@ -7,10 +7,10 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
             title: "首页",
         },
-        component: () => import("@/page/home/HomePage.vue"),
+        component: () => import("@/page/home/index.vue"),
     },
     {
-        path: "/login",
+            path: "/login",
         name: "Login",
         meta: {
             title: "登录",
