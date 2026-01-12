@@ -1,5 +1,6 @@
 <template>
   <div class="login-page">
+    login
     <!-- Login component content -->
   </div>
 </template>
