@@ -18,7 +18,7 @@ export function createChangeEmitter<Data = unknown>(): ChangeEmitter<Data> {
         listeners.push(onData);
         return () => {
             let i = 0;
-             
+
             while (true) {
                 const index = listeners.indexOf(onData, i);
                 if (index === -1) return;
@@ -31,7 +31,7 @@ export function createChangeEmitter<Data = unknown>(): ChangeEmitter<Data> {
     function wait(duration = 0): Promise<Data> {
         return new Promise<Data>((resolve, reject): void => {
             let timeout = false;
-            let timer: NodeJS.Timer | null = null;
+            let timer: NodeJS.Timeout | null = null;
             if (duration > 0) {
                 timer = setTimeout((): void => {
                     timer = null;

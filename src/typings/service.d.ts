@@ -19,7 +19,7 @@ interface ServiceRequestResult<T = unknown> {
     /** 错误对象 */
     error: ServiceRequestError | null;
     /** 报头信息 */
-    headers?: Record<string, string>;
+    headers?: import("axios").RawAxiosResponseHeaders | import("axios").AxiosResponseHeaders;
     /** 结果数据 */
     data: T | null;
     /** 错误信息 */

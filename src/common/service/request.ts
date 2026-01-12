@@ -63,9 +63,7 @@ export function showErrorMsg(error: ServiceRequestError): void {
  * @param {AxiosError} axiosError
  * @return {ServiceRequestResult}
  */
-async function handleAxiosError<T>(
-    axiosError: AxiosError,
-): Promise<ServiceRequestResult<T>> {
+async function handleAxiosError<T>(axiosError: AxiosError<Record<string, unknown>>,): Promise<ServiceRequestResult<T>> {
     const error: ServiceRequestError = {
         type: "axios",
         code: DEFAULT_REQUEST_ERROR_CODE,
@@ -88,7 +86,7 @@ async function handleAxiosError<T>(
         ((axiosError.response as AxiosResponse | undefined)
             ?.status as ErrorStatus) || "DEFAULT";
     error.code = errorCode;
-    error.msg = axiosError.response?.data?.message || ERROR_STATUS[errorCode];
+    error.msg = <string>axiosError.response?.data?.message || ERROR_STATUS[errorCode];
     showErrorMsg(error);
     return { error, data: null };
 }
@@ -142,9 +140,7 @@ async function handleRefreshTokenError<T>(): Promise<ServiceRequestResult<T>> {
 }
 
 /** 创建axios*/
-export function createAxios(
-    axiosConfig: InternalAxiosRequestConfig,
-): AxiosInstance {
+export function createAxios(axiosConfig: AxiosRequestConfig,): AxiosInstance {
     const instance = axios.create(axiosConfig);
     instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
         const handleConfig: InternalAxiosRequestConfig = { ...config };
@@ -159,10 +155,7 @@ export function createAxios(
     });
 
     // @ts-ignore 忽略类型检查，因为这里的返回类型比较复杂
-    instance.interceptors.response.use(
-        (
-            response: AxiosResponse,
-        ): Promise<ServiceRequestResult> | ServiceRequestResult => {
+    instance.interceptors.response.use((response: AxiosResponse,): Promise<ServiceRequestResult> | ServiceRequestResult => {
             // HTTP响应状态不在有效氛围内。
             if (
                 response.status < 200 ||
@@ -222,7 +215,7 @@ export function createAxios(
             showErrorMsg(error);
             return { error, headers, data: null };
         },
-        (axiosError: AxiosError) => {
+        (axiosError: AxiosError<Record<string, unknown>>) => {
             return handleAxiosError(axiosError);
         },
     );
@@ -269,19 +262,14 @@ export interface RequestUtils {
      * @param url - 请求地址
      * @param config - axios配置
      */
-    delete<T = unknown>(
-        url: string,
-        config: AxiosRequestConfig,
-    ): Promise<ServiceRequestResult<T>>;
+    delete<T = unknown>(url: string, config: AxiosRequestConfig,): Promise<ServiceRequestResult<T>>;
 }
 
 /**
  * 创建请求
  * @param axiosConfig - axios配置
  */
-export function createRequestUtils(
-    axiosConfig: AxiosRequestConfig,
-): RequestUtils {
+export function createRequestUtils(axiosConfig: AxiosRequestConfig,): RequestUtils {
     const instance = createAxios(axiosConfig);
     return {
         get: <T = unknown>(

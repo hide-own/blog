@@ -1,6 +1,7 @@
 interface ImportMeta {
     readonly env: ImportMetaEnv;
 }
+
 declare module "*.vue" {
     import type {DefineComponent} from "vue";
 
@@ -16,15 +17,11 @@ declare namespace NodeJS {
     }
 }
 
-interface ImportMetaEnv extends Readonly<Record<string, string>> {
+// 扩展 Vite 的 ImportMetaEnv 类型，而不是重新定义
+interface ImportMetaEnv {
     readonly VITE_ENV: string; // 环境
     readonly VITE_OUTPUT_DIR: string; // 打包目录
 }
-
-// 删除重复的 ImportMeta 接口定义
-// interface ImportMeta {
-//     readonly env: ImportMetaEnv;
-// }
 
 interface Window {
     showLoading: () => void;
