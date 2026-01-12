@@ -2,9 +2,9 @@ interface ImportMeta {
     readonly env: ImportMetaEnv;
 }
 declare module "*.vue" {
-    import type { DefineComponent } from "vue";
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    const component: DefineComponent<{}, {}, never>;
+    import type {DefineComponent} from "vue";
+
+    const component: DefineComponent<Record<string, unknown>, Record<string, unknown>, never>;
     export default component;
 }
 
@@ -21,9 +21,10 @@ interface ImportMetaEnv extends Readonly<Record<string, string>> {
     readonly VITE_OUTPUT_DIR: string; // 打包目录
 }
 
-interface ImportMeta {
-    readonly env: ImportMetaEnv;
-}
+// 删除重复的 ImportMeta 接口定义
+// interface ImportMeta {
+//     readonly env: ImportMetaEnv;
+// }
 
 interface Window {
     showLoading: () => void;

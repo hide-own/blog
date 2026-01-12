@@ -1,4 +1,4 @@
-import { StorageProxy } from "./storage";
+import {StorageProxy} from "./storage";
 
 //保存的数据格式
 interface Data extends Record<AccessTokenType, string> {
@@ -17,7 +17,7 @@ const sys = new StorageProxy<keyof Data, Data>(localStorage, "system:");
  */
 export function getPersist<K extends keyof Data>(
     key: K,
-    defaultValue: Data[K] | null = null
+    defaultValue: Data[K] | null = null,
 ): Data[K] | null {
     return sys.getItem(key) ?? defaultValue;
 }
@@ -31,7 +31,7 @@ export function getPersist<K extends keyof Data>(
 export function setPersist<K extends keyof Data>(
     key: K,
     value: Data[K],
-    expire: number | null = null
+    expire: number | null = null,
 ): void {
     sys.setItem(key, value, expire);
 }

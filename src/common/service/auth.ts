@@ -1,5 +1,5 @@
-import { AxiosInstance, AxiosRequestConfig } from "axios";
-import { wait } from "../shared";
+import {AxiosInstance, AxiosRequestConfig} from "axios";
+import {wait} from "../shared";
 
 /**
  * 登录时的回调函数
@@ -7,7 +7,7 @@ import { wait } from "../shared";
 
 export async function waitLoginComplete<T>(
     config: AxiosRequestConfig<ServiceRequestResult<T>>,
-    axios: AxiosInstance
+    axios: AxiosInstance,
 ): Promise<ServiceRequestResult<T>> {
     // useProfileStore().loginDialogVisible = true;   打开登录弹窗
     if (!(await wait("loginResult"))) {

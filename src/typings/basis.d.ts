@@ -61,7 +61,7 @@ interface GeneralEventListener<E = Event> {
 /** 事件过滤器函数签名 */
 type EventFilter<Args extends unknown[] = unknown[], This = unknown> = (
     invoke: VoidCallback,
-    options?: (...args: Args) => This
+    options?: (...args: Args) => This,
 ) => void;
 
 interface Position {

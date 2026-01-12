@@ -1,13 +1,9 @@
-import axios, {
-    AxiosError,
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-} from "axios";
-import { waitLoginComplete } from "./auth";
+import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig,} from "axios";
+import {waitLoginComplete} from "./auth";
 
 //持久化
-import { user } from "@/store/user";
+import {user} from "@/store/user";
+
 const userStore = user();
 
 type RequestMethod = "get" | "post" | "put" | "delete";
@@ -68,7 +64,7 @@ export function showErrorMsg(error: ServiceRequestError): void {
  * @return {ServiceRequestResult}
  */
 async function handleAxiosError<T>(
-    axiosError: AxiosError
+    axiosError: AxiosError,
 ): Promise<ServiceRequestResult<T>> {
     const error: ServiceRequestError = {
         type: "axios",
@@ -92,7 +88,7 @@ async function handleAxiosError<T>(
         ((axiosError.response as AxiosResponse | undefined)
             ?.status as ErrorStatus) || "DEFAULT";
     error.code = errorCode;
-    error.msg = axiosError.response?.data.message || ERROR_STATUS[errorCode];
+    error.msg = axiosError.response?.data?.message || ERROR_STATUS[errorCode];
     showErrorMsg(error);
     return { error, data: null };
 }
@@ -104,9 +100,9 @@ async function handleAxiosError<T>(
  * @param {AxiosResponse} response
  * @return {ServiceRequestResult}
  */
-async function handleResponseError<T>(
+async function handleResponseError<T = unknown>(
     axios: AxiosInstance,
-    response: AxiosResponse
+    response: AxiosResponse,
 ): Promise<ServiceRequestResult<T>> {
     const error: ServiceRequestError = {
         type: "http",
@@ -147,15 +143,13 @@ async function handleRefreshTokenError<T>(): Promise<ServiceRequestResult<T>> {
 
 /** 创建axios*/
 export function createAxios(
-    axiosConfig: AxiosRequestConfig = {}
+    axiosConfig: InternalAxiosRequestConfig,
 ): AxiosInstance {
     const instance = axios.create(axiosConfig);
-    instance.interceptors.request.use(function (config: AxiosRequestConfig) {
-        const handleConfig: AxiosRequestConfig = { ...config };
+    instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+        const handleConfig: InternalAxiosRequestConfig = { ...config };
         const token: string | null = userStore.token;
         if (token != null) {
-            // 如果token 存在则携带相关token访问
-            handleConfig.headers ??= {};
             handleConfig.headers["Authorization"] = token;
         }
         if (!handleConfig.timeout) {
@@ -164,8 +158,11 @@ export function createAxios(
         return handleConfig;
     });
 
+    // @ts-ignore 忽略类型检查，因为这里的返回类型比较复杂
     instance.interceptors.response.use(
-        async (response: AxiosResponse): Promise<ServiceRequestResult> => {
+        (
+            response: AxiosResponse,
+        ): Promise<ServiceRequestResult> | ServiceRequestResult => {
             // HTTP响应状态不在有效氛围内。
             if (
                 response.status < 200 ||
@@ -227,7 +224,7 @@ export function createAxios(
         },
         (axiosError: AxiosError) => {
             return handleAxiosError(axiosError);
-        }
+        },
     );
     return instance;
 }
@@ -240,7 +237,7 @@ export interface RequestUtils {
      */
     get<T = unknown>(
         url: string,
-        config?: AxiosRequestConfig
+        config?: AxiosRequestConfig,
     ): Promise<ServiceRequestResult<T>>;
 
     /**
@@ -252,7 +249,7 @@ export interface RequestUtils {
     post<T = unknown>(
         url: string,
         data?: unknown,
-        config?: AxiosRequestConfig
+        config?: AxiosRequestConfig,
     ): Promise<ServiceRequestResult<T>>;
 
     /**
@@ -264,7 +261,7 @@ export interface RequestUtils {
     put<T = unknown>(
         url: string,
         data?: unknown,
-        config?: AxiosRequestConfig
+        config?: AxiosRequestConfig,
     ): Promise<ServiceRequestResult<T>>;
 
     /**
@@ -274,7 +271,7 @@ export interface RequestUtils {
      */
     delete<T = unknown>(
         url: string,
-        config: AxiosRequestConfig
+        config: AxiosRequestConfig,
     ): Promise<ServiceRequestResult<T>>;
 }
 
@@ -283,30 +280,30 @@ export interface RequestUtils {
  * @param axiosConfig - axios配置
  */
 export function createRequestUtils(
-    axiosConfig: AxiosRequestConfig
+    axiosConfig: AxiosRequestConfig,
 ): RequestUtils {
     const instance = createAxios(axiosConfig);
     return {
         get: <T = unknown>(
             url: string,
-            config?: AxiosRequestConfig
+            config?: AxiosRequestConfig,
         ): Promise<ServiceRequestResult<T>> =>
             getRequestResponse(instance, "get", url, undefined, config),
         post: <T = unknown>(
             url: string,
             data?: unknown,
-            config?: AxiosRequestConfig
+            config?: AxiosRequestConfig,
         ): Promise<ServiceRequestResult<T>> =>
             getRequestResponse(instance, "post", url, data, config),
         put: <T = unknown>(
             url: string,
             data?: unknown,
-            config?: AxiosRequestConfig
+            config?: AxiosRequestConfig,
         ): Promise<ServiceRequestResult<T>> =>
             getRequestResponse(instance, "put", url, data, config),
         delete: <T = unknown>(
             url: string,
-            config: AxiosRequestConfig
+            config: AxiosRequestConfig,
         ): Promise<ServiceRequestResult<T>> =>
             getRequestResponse(instance, "delete", url, undefined, config),
     };
@@ -317,7 +314,7 @@ async function getRequestResponse<T>(
     method: RequestMethod,
     url: string,
     data?: unknown,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
 ): Promise<ServiceRequestResult<T>> {
     switch (method) {
         case "get":

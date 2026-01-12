@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import {createRouter, createWebHistory, RouteRecordRaw} from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -7,7 +7,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
             title: "首页",
         },
-        component: () => import("@/page/home/Home.vue"),
+        component: () => import("@/page/home/HomePage.vue"),
     },
     {
         path: "/login",
@@ -15,12 +15,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
             title: "登录",
         },
-        component: () => import("@/page/Login.vue"),
+        component: () => import("@/page/LoginPage.vue"),
     },
 ];
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory("/"),
     routes,
 });
 

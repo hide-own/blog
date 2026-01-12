@@ -1,4 +1,4 @@
-import { createPinia } from "pinia";
+import {createPinia} from "pinia";
 import pinaPluginPersist from "pinia-plugin-persist";
 
 const store = createPinia();

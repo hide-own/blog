@@ -5,7 +5,7 @@ interface StoreItem<T> {
 
 interface StoreItemDetails<
     K extends keyof D,
-    D extends Record<string, unknown>
+    D extends Record<string, unknown>,
 > {
     namespace: string;
     index: number;
@@ -37,7 +37,7 @@ function isExpire(expire: number | null): boolean {
 
 export class StorageProxy<
     Key extends keyof Data,
-    Data extends Record<string, unknown>
+    Data extends Record<string, unknown>,
 > {
     protected storage: Storage;
     protected namespace: string;

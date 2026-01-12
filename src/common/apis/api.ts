@@ -1,4 +1,4 @@
-import { NetEase } from "../service";
+import {NetEase} from "../service";
 
 //登录
 type loginType = {
@@ -27,7 +27,7 @@ type verifyCaptchaType = {
 };
 
 export function verifyCaptcha(
-    data: verifyCaptchaType
+    data: verifyCaptchaType,
 ): AsyncServiceRequestResult<{
     msg: string;
 }> {

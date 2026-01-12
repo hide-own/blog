@@ -18,7 +18,7 @@ export function createChangeEmitter<Data = unknown>(): ChangeEmitter<Data> {
         listeners.push(onData);
         return () => {
             let i = 0;
-            // eslint-disable-next-line no-constant-condition
+             
             while (true) {
                 const index = listeners.indexOf(onData, i);
                 if (index === -1) return;
@@ -63,7 +63,7 @@ const events: Events<GlobalData> = Object.create(null);
 
 export function listen<Key extends GlobalKey>(
     type: Key,
-    onData: ValueChanged<GlobalData[Key]>
+    onData: ValueChanged<GlobalData[Key]>,
 ): VoidCallback {
     if (!(type in events)) {
         events[type] = createChangeEmitter();
@@ -73,14 +73,14 @@ export function listen<Key extends GlobalKey>(
 
 export function emit<Key extends GlobalKey>(
     type: Key,
-    data: GlobalData[Key]
+    data: GlobalData[Key],
 ): void {
     events[type]?.emit(data);
 }
 
 export function wait<Key extends GlobalKey>(
     type: Key,
-    duration?: number
+    duration?: number,
 ): Promise<GlobalData[Key]> {
     if (!(type in events)) {
         events[type] = createChangeEmitter();

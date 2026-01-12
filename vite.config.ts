@@ -1,9 +1,8 @@
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import { resolve } from "path";
+import {fileURLToPath, URL} from "node:url";
+import {defineConfig} from "vite";
+import vue from '@vitejs/plugin-vue'
 import Components from "unplugin-vue-components/vite";
-import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
-import legacyPlugin from "@vitejs/plugin-legacy";
+import {AntDesignVueResolver} from "unplugin-vue-components/resolvers";
 
 export default defineConfig({
     plugins: [
@@ -11,19 +10,15 @@ export default defineConfig({
         Components({
             resolvers: [AntDesignVueResolver()], //按需引入
         }),
-        legacyPlugin({
-            targets: ["chrome 52"], // 需要兼容的目标列表，可以设置多个
-            additionalLegacyPolyfills: ["regenerator-runtime/runtime"], // 面向IE11时需要此插件
-        }),
     ],
     resolve: {
         alias: {
-            "@": resolve(__dirname, "src"), //别名
+            "@": fileURLToPath(new URL("./src", import.meta.url)), //别名
         },
     },
     base: "./", // 打包路径
     server: {
-        open: true, // 服务启动时是否自动打开浏览器
+        open: false, // 服务启动时是否自动打开浏览器
         cors: true, // 允许跨域
     },
     build: {
@@ -48,7 +43,7 @@ export default defineConfig({
         terserOptions: {
             compress: {
                 //清除console和debugger
-                drop_console: true,
+                drop_console: false,
                 drop_debugger: true,
             },
         },
