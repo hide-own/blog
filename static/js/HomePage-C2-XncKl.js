@@ -1,1 +1,0 @@
-import{k as r,o as s}from"./@vue-Dw-CrC80.js";const a=(e,t)=>{const o=e.__vccOpts||e;for(const[c,n]of t)o[c]=n;return o},_={};function f(e,t){return s(),r("div",null,"12")}const m=a(_,[["render",f]]);export{m as default};
