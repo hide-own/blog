@@ -3,4 +3,4 @@
  * - admin_token 管理员
  * - token 用户
  */
-type AccessTokenType = "admin_token" | "token";
+type AccessTokenType = "admin_token" | "token"

@@ -1,32 +1,25 @@
-import {createRouter, createWebHashHistory, RouteRecordRaw} from "vue-router";
+import {createRouter, createWebHashHistory, RouteRecordRaw} from "vue-router"
 
 const routes: Array<RouteRecordRaw> = [
-    {
-        path: "/",
-        name: "Home",
-        meta: {
-            title: "首页",
-        },
-        component: () => import("@/page/home/index.vue"),
-    },
-    {
-            path: "/login",
-        name: "Login",
-        meta: {
-            title: "登录",
-        },
-        component: () => import("@/page/LoginPage.vue"),
-    },
-];
+	{
+		path: "/",
+		name: "Home",
+		meta: {
+			title: "首页",
+			keepAlive: true
+		},
+		component: () => import("@/page/home/index.vue")
+	}
+]
 
 const router = createRouter({
-    history: createWebHashHistory("/"),
-    routes,
-});
+	history: createWebHashHistory("/"),
+	routes
+})
 
 router.beforeEach((to, from, next) => {
-    document.title = to.meta.title as string; //设置网页标题
-    next();
-});
+	document.title = to.meta.title as string //设置网页标题
+	next()
+})
 
-export default router;
+export default router

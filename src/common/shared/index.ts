@@ -1,2 +1,2 @@
-export * from "./emitter";
-export * from "./persist";
+export * from "./emitter"
+export * from "./persist"

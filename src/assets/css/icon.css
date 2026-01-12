@@ -1,38 +1,38 @@
 @font-face {
-    font-family: "ht"; /* Project id 2963372 */
-    src:
-        url("//at.alicdn.com/t/font_2963372_jh2dr4x4vw9.woff2?t=1653321093678")
-            format("woff2"),
-        url("//at.alicdn.com/t/font_2963372_jh2dr4x4vw9.woff?t=1653321093678")
-            format("woff"),
-        url("//at.alicdn.com/t/font_2963372_jh2dr4x4vw9.ttf?t=1653321093678")
-            format("truetype");
+	font-family: "ht"; /* Project id 2963372 */
+	src:
+		url("//at.alicdn.com/t/font_2963372_jh2dr4x4vw9.woff2?t=1653321093678")
+			format("woff2"),
+		url("//at.alicdn.com/t/font_2963372_jh2dr4x4vw9.woff?t=1653321093678")
+			format("woff"),
+		url("//at.alicdn.com/t/font_2963372_jh2dr4x4vw9.ttf?t=1653321093678")
+			format("truetype");
 }
 
 .ht {
-    font-family: "ht" !important;
-    font-size: 16px;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+	font-family: "ht" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .ht-mima:before {
-    content: "\e626";
+	content: "\e626";
 }
 
 .ht-yonghu:before {
-    content: "\e8c8";
+	content: "\e8c8";
 }
 
 .ht-suoding:before {
-    content: "\e600";
+	content: "\e600";
 }
 
 .ht-yonghutianchong:before {
-    content: "\e6a2";
+	content: "\e6a2";
 }
 
 .ht-anquanbaozhang:before {
-    content: "\e88c";
+	content: "\e88c";
 }

@@ -17,12 +17,7 @@ export default defineConfig({
         },
     },
     base: "./", // 打包路径
-    server: {
-        open: false, // 服务启动时是否自动打开浏览器
-        cors: true, // 允许跨域
-    },
     build: {
-        // chunkSizeWarningLimit: 1500, 大文件报警阈值设置,不建议使用
         rollupOptions: {
             output: {
                 //静态资源分拆打包
@@ -39,13 +34,6 @@ export default defineConfig({
                     }
                 },
             },
-        },
-        terserOptions: {
-            compress: {
-                //清除console和debugger
-                drop_console: false,
-                drop_debugger: true,
-            },
-        },
+        }
     },
 });
